@@ -16,6 +16,12 @@ function checkProjectExists(req, res, next){
   return next();
 }
 
+function countReq(req,res,next){
+  console.count("Number of Requests");
+  return next();
+}
+
+routes.use(countReq);
 
 //login page
 routes.get('/',(req,res)=>{
@@ -45,7 +51,7 @@ routes.post('/projects',(req,res)=>{
 
 
 // edit projetc title
-routes.put('/projects/:id',(req,res)=>{
+routes.put('/projects/:id', checkProjectExists, (req,res)=>{
   const { title } = req.body;
   const { id } = req.params;
 
@@ -56,7 +62,7 @@ routes.put('/projects/:id',(req,res)=>{
 });
 
 // delete project 
-routes.delete('/projects/:id',(req,res)=>{
+routes.delete('/projects/:id', checkProjectExists, (req,res)=>{
   const { id } = req.params;
 
   const projectIndex = projects.findIndex(p => p.id == id);
